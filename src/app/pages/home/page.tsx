@@ -12,7 +12,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        await liff.init({ liffId: "YOUR_LIFF_ID" }); // ← 実際の LIFF ID に置き換えてください
+        await liff.init({ liffId: '2007545363-o6yDADGR' }); // ← 実際の LIFF ID に置き換えてください
 
         if (!liff.isLoggedIn()) {
           liff.login();
