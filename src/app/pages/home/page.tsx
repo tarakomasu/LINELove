@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import liff from "@line/liff";
-import { Profile } from '@/app/types/line-profile'
+import { Profile } from '@/app/types/line-profile';
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -12,7 +12,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        await liff.init({ liffId: '2007545363-o6yDADGR' }); // ← 実際の LIFF ID に置き換えてください
+        await liff.init({ liffId: '2007545363-o6yDADGR' });
 
         if (!liff.isLoggedIn()) {
           liff.login();
@@ -30,6 +30,26 @@ export default function ProfilePage() {
     fetchProfile();
   }, []);
 
+  // シェアボタンが押されたときの処理
+  const handleShare = async () => {
+    if (!liff.isApiAvailable("shareTargetPicker")) {
+      alert("この端末ではシェアターゲットピッカーは使えません。");
+      return;
+    }
+
+    try {
+      await liff.shareTargetPicker([
+        {
+          type: "text",
+          text: `こんにちは！これは ${profile?.displayName} さんのプロフィールからのシェアメッセージです。`,
+        },
+      ]);
+    } catch (err) {
+      console.error("シェアに失敗しました:", err);
+      alert("シェアに失敗しました");
+    }
+  };
+
   if (error) return <p>{error}</p>;
   if (!profile) return <p>読み込み中...</p>;
 
@@ -46,6 +66,22 @@ export default function ProfilePage() {
         <p><strong>ステータスメッセージ：</strong>{profile.statusMessage}</p>
       )}
       <p><strong>ユーザーID：</strong>{profile.userId}</p>
+
+      <button
+        onClick={handleShare}
+        style={{
+          marginTop: "1.5rem",
+          padding: "0.75rem 1.5rem",
+          backgroundColor: "#06C755",
+          color: "white",
+          border: "none",
+          borderRadius: "8px",
+          fontSize: "16px",
+          cursor: "pointer",
+        }}
+      >
+        シェアする
+      </button>
     </div>
   );
 }
