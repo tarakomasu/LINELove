@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import liff from "@line/liff";
 import { Profile } from '@/app/types/line-profile';
+import { profileFlexMessage } from '@/app/flex-messages/BUbble'
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -40,9 +41,26 @@ export default function ProfilePage() {
     try {
       await liff.shareTargetPicker([
         {
-          type: "text",
-          text: `こんにちは！これは ${profile?.displayName} さんのプロフィールからのシェアメッセージです。`,
-        },
+          "type": "flex",
+          "altText": "This is a Flex Message",
+          "contents": {
+            "type": "bubble",
+            "body": {
+              "type": "box",
+              "layout": "horizontal",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "Hello,"
+                },
+                {
+                  "type": "text",
+                  "text": "World!"
+                }
+              ]
+            }
+          }
+        }
       ]);
     } catch (err) {
       console.error("シェアに失敗しました:", err);
