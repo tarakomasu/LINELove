@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Script from "next/script";
 import liff from "@line/liff";
 import { Profile } from '../app/types/line-profile'
@@ -10,7 +11,7 @@ const LIFF_ID = '2007545363-o6yDADGR'
 
 export default function LiffPage() {
   const [profile, setProfile] = useState<Profile | null>(null);
-
+  const Router = useRouter()
   useEffect(() => {
     const initializeLiff = async () => {
       if (typeof liff === "undefined") return;
@@ -19,9 +20,11 @@ export default function LiffPage() {
 
       if (!liff.isLoggedIn()) {
         liff.login();
+        Router.push('../pages/home')
       } else {
         const profile = await liff.getProfile();
         setProfile(profile);
+        Router.push('../pages/home')
       }
     };
 
