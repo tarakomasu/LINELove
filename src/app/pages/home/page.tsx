@@ -43,7 +43,7 @@ export default function ProfilePage() {
           type: "flex",
           altText: "This is a Flex Message",
           //敗北
-          contents:contents as any
+          contents: letter as any
         }
       ]);
     } catch (err) {
