@@ -9,7 +9,8 @@ import { contents } from '@/app/flex-message-templates/letter'
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [error, setError] = useState("");
-
+  const imgURL = '/FlexImages/letter-pop.png'
+  console.log(imgURL)
   useEffect(() => {
     const fetchProfile = async () => {
       try {
