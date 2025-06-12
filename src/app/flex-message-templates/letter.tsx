@@ -1,4 +1,4 @@
-const letterImg = '/FlexImages/letter-pop.png';
+const letterImg = '/FlexImages/letter-sick.png';
 export const contents = {
   "type": "bubble",
   "header": {
@@ -11,7 +11,7 @@ export const contents = {
         "contents": [
           {
             "type": "image",
-            "url": `${letterImg}`,
+            "url": "https://line-love.vercel.app/FlexImages/letter-sick.png",
             "size": "full",
             "aspectMode": "cover",
             "aspectRatio": "150:196",
