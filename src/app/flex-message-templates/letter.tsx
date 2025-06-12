@@ -1,4 +1,4 @@
-const letter = 
+export const letter = 
     {
       "type": "bubble",
       "body": {

@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import liff from "@line/liff";
 import { Profile } from '@/app/types/line-profile';
-import { contents } from '@/app/flex-message-templates/letter'
+import { letter } from '@/app/flex-message-templates/letter'
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
