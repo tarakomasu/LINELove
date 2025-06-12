@@ -1,4 +1,3 @@
-const letterImg = '/FlexImages/letter-pop.png';
 export const contents = {
   "type": "bubble",
   "header": {
@@ -11,7 +10,7 @@ export const contents = {
         "contents": [
           {
             "type": "image",
-            "url": letterImg,
+            "url": "https://developers-resource.landpress.line.me/fx/clip/clip4.jpg",
             "size": "full",
             "aspectMode": "cover",
             "aspectRatio": "150:196",
