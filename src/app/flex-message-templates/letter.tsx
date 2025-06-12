@@ -1,4 +1,4 @@
-import letterPop from '@/public/FlexImages/letter-pop.png';
+import letterImg from '@/public/FlexImages/letter-pop.png';
 export const contents = {
   "type": "bubble",
   "header": {
@@ -11,7 +11,7 @@ export const contents = {
         "contents": [
           {
             "type": "image",
-            "url": letterPop.src,
+            "url": letterImg.src,
             "size": "full",
             "aspectMode": "cover",
             "aspectRatio": "150:196",
