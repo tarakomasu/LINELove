@@ -1,5 +1,5 @@
-export const contents =
-{
+import letterPop from '@/public/FlexImages/letter-pop.png';
+export const contents = {
   "type": "bubble",
   "header": {
     "type": "box",
@@ -11,12 +11,16 @@ export const contents =
         "contents": [
           {
             "type": "image",
-            "url": "https://developers-resource.landpress.line.me/fx/clip/clip4.jpg",
+            "url": letterPop.src,
             "size": "full",
             "aspectMode": "cover",
             "aspectRatio": "150:196",
             "gravity": "center",
-            "flex": 1
+            "flex": 1,
+            "action": {
+              "type": "uri",
+              "uri": "https://example.com/property-detail" // 遷移先URL
+            }
           },
           {
             "type": "box",
@@ -28,7 +32,11 @@ export const contents =
                 "size": "full",
                 "aspectMode": "cover",
                 "aspectRatio": "150:98",
-                "gravity": "center"
+                "gravity": "center",
+                "action": {
+                  "type": "uri",
+                  "uri": "https://example.com/property-detail"
+                }
               },
               {
                 "type": "image",
@@ -36,7 +44,11 @@ export const contents =
                 "size": "full",
                 "aspectMode": "cover",
                 "aspectRatio": "150:98",
-                "gravity": "center"
+                "gravity": "center",
+                "action": {
+                  "type": "uri",
+                  "uri": "https://example.com/property-detail"
+                }
               }
             ],
             "flex": 1
@@ -85,7 +97,6 @@ export const contents =
             "contents": [
               {
                 "type": "text",
-                
                 "size": "xl",
                 "wrap": true,
                 "text": "Cony Residence",
@@ -111,7 +122,6 @@ export const contents =
                 "contents": [
                   {
                     "type": "text",
-                    
                     "size": "sm",
                     "wrap": true,
                     "margin": "lg",
@@ -126,7 +136,11 @@ export const contents =
             "cornerRadius": "2px",
             "margin": "xl"
           }
-        ]
+        ],
+        "action": {
+          "type": "uri",
+          "uri": "https://example.com/property-detail"
+        }
       }
     ],
     "paddingAll": "20px",
