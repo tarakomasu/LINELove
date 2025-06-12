@@ -38,6 +38,11 @@ export const letter =
             "paddingBottom": "2px"
           }
         ],
-        "paddingAll": "0px"
+        "paddingAll": "0px",
+        "action": {
+          "type": "uri",
+          "label": "action",
+          "uri": "https://liff.line.me/2007545363-o6yDADGR"
+        }
       }
     }
