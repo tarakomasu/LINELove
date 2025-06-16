@@ -1,14 +1,17 @@
 // app/profile/page.tsx
+// link to LINE for easy
 "use client";
 
 import { useEffect, useState } from "react";
 import liff from "@line/liff";
 import { Profile } from '@/app/types/line-profile';
-import { letter } from '@/app/flex-message-templates/letter'
+import { letter } from '../../../../public/flex-message-templates/letter'
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [error, setError] = useState("");
+  const router = useRouter();
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -52,6 +55,10 @@ export default function ProfilePage() {
     }
   };
 
+  const sendPage = () => {
+    router.push('../pages/choose-flex-message')
+  };
+
   if (error) return <p>{error}</p>;
   if (!profile) return <p>読み込み中...</p>;
 
@@ -83,6 +90,21 @@ export default function ProfilePage() {
         }}
       >
         シェアハピ
+      </button>
+      <button
+        onClick={sendPage}
+        style={{
+          marginTop: "1.5rem",
+          padding: "0.75rem 1.5rem",
+          backgroundColor: "#06C755",
+          color: "white",
+          border: "none",
+          borderRadius: "8px",
+          fontSize: "16px",
+          cursor: "pointer",
+        }}
+      >
+        テンプレ作成
       </button>
     </div>
   );

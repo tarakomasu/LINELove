@@ -7,7 +7,7 @@ export const letter =
         "contents": [
           {
             "type": "image",
-            "url": "https://line-love.vercel.app/FlexImages/letter-sick.png",
+            "url": "https://line-love.vercel.app/flex-images/letter-sick.png",
             "size": "full",
             "aspectMode": "cover",
             "aspectRatio": "3:2",
