@@ -42,7 +42,7 @@ export default function Component() {
   const handleNext = () => {
     if (selectedTemplate) {
       console.log("選択されたテンプレート:", selectedTemplate)
-      router.push('/letter-content')
+      router.push('/pages/choose-flex-message/letter-content')
     }
   }
 

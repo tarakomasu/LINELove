@@ -59,6 +59,10 @@ export default function ProfilePage() {
     router.push('../pages/choose-flex-message')
   };
 
+  const sendPhotoFrame = () => {
+    router.push('../pages/choose-photo-frame')
+  };
+
   if (error) return <p>{error}</p>;
   if (!profile) return <p>読み込み中...</p>;
 
@@ -105,6 +109,21 @@ export default function ProfilePage() {
         }}
       >
         テンプレ作成
+      </button>
+      <button
+        onClick={sendPhotoFrame}
+        style={{
+          marginTop: "1.5rem",
+          padding: "0.75rem 1.5rem",
+          backgroundColor: "#06C755",
+          color: "white",
+          border: "none",
+          borderRadius: "8px",
+          fontSize: "16px",
+          cursor: "pointer",
+        }}
+      >
+        フォトフレーム
       </button>
     </div>
   );

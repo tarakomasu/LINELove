@@ -1,4 +1,3 @@
-//紹介ページ
 'use client'
 
 import { useEffect, useState } from "react";
