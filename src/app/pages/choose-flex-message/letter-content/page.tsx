@@ -185,6 +185,12 @@ export default function MergeEditor() {
             if (file) addImage(currentPageId, file);
           }}
         />
+        <button
+          onClick={() => console.log(pages)}
+          className="bg-gray-500 text-white px-3 py-1 rounded"
+        >
+          ページ内容
+        </button>
       </div>
     </div>
   );
