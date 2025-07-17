@@ -1,72 +1,102 @@
-// app/api/merge/route.ts
-import { NextRequest, NextResponse } from 'next/server'
-import sharp from 'sharp'
-import path from 'path'
-import fs from 'fs/promises'
+// app/api/merge-letter/route.tsx
+import { NextRequest, NextResponse } from 'next/server';
+import sharp from 'sharp';
+import path from 'path';
+
+// Define types matching the frontend
+type CanvasItem = {
+  id: string;
+  type: 'text' | 'image';
+  value: string; // For text: content; for image: original filename
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+type Page = {
+  id:string;
+  items: CanvasItem[];
+};
 
 export const config = {
   runtime: 'nodejs',
-}
+};
 
 export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData()
-    const image2 = formData.get('image2') as File
-    const text = formData.get('text')?.toString() || ''
+    const formData = await req.formData();
+    const pagesJson = formData.get('pages')?.toString();
+    const files = formData.getAll('files') as File[];
 
-    if (!image2) {
-      return NextResponse.json({ error: '合成用画像が足りません' }, { status: 400 })
+    if (!pagesJson) {
+      return NextResponse.json({ error: 'Pages data is missing' }, { status: 400 });
     }
 
-    // ✅ 背景画像を public フォルダから読み込み
-    const bgPath = path.join(process.cwd(), 'public', '/flex-template-view/gpt12.png')
-    const buffer1 = await fs.readFile(bgPath)
+    const pages: Page[] = JSON.parse(pagesJson);
+    const generatedImageUrls: string[] = [];
 
-    const buffer2 = Buffer.from(await image2.arrayBuffer())
+    // Process each page
+    for (const page of pages) {
+      const bgPath = path.join(process.cwd(), 'public', 'flex-template-view', 'gpt12.png');
+      const canvas = sharp(bgPath);
 
-    // ✅ 背景画像のサイズを取得
-    const baseMeta = await sharp(buffer1).metadata()
-    const { width = 800, height = 600 } = baseMeta
+      const compositeLayers: sharp.OverlayOptions[] = [];
 
-    // ✅ 合成画像を縮小
-    const overlayWidth = Math.floor(width * 0.3)
-    const overlayHeight = Math.floor(height * 0.3)
-    const resizedOverlay = await sharp(buffer2)
-      .resize(overlayWidth, overlayHeight)
-      .png()
-      .toBuffer()
-
-    // ✅ テキストをSVGで作成
-    const svgText = `
-      <svg width="${width}" height="100">
-        <style>
-          .title {
-            fill: white;
-            font-size: 32px;
-            font-weight: bold;
-            text-anchor: middle;
+      for (const item of page.items) {
+        if (item.type === 'text') {
+          // Create an SVG for the text item to allow for better styling
+          const svgText = `
+            <svg width="${Math.round(item.width)}" height="${Math.round(item.height)}">
+              <foreignObject width="100%" height="100%">
+                <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: sans-serif; font-size: 24px; font-weight: bold; color: black; text-align: center;">
+                  ${item.value}
+                </div>
+              </foreignObject>
+            </svg>
+          `;
+          const textBuffer = await sharp(Buffer.from(svgText)).png().toBuffer();
+          compositeLayers.push({
+            input: textBuffer,
+            top: Math.round(item.y),
+            left: Math.round(item.x),
+          });
+        } else if (item.type === 'image') {
+          // Find the corresponding file from the FormData
+          const imageFile = files.find(f => f.name === item.value);
+          if (imageFile) {
+            const imageBuffer = Buffer.from(await imageFile.arrayBuffer());
+            // Resize the image to fit the item's dimensions
+            const resizedImage = await sharp(imageBuffer)
+              .resize(Math.round(item.width), Math.round(item.height))
+              .png()
+              .toBuffer();
+            compositeLayers.push({
+              input: resizedImage,
+              top: Math.round(item.y),
+              left: Math.round(item.x),
+            });
           }
-        </style>
-        <text x="50%" y="50%" class="title" dominant-baseline="middle">${text}</text>
-      </svg>
-    `
-    const textImage = await sharp(Buffer.from(svgText)).png().toBuffer()
+        }
+      }
 
-    // ✅ 出力ファイル名（ランダムでも固定でも可）
-    const outputPath = path.join(process.cwd(), 'public', 'output.png')
+      // Generate a unique filename for the output image
+      const outputFileName = `output-${page.id}-${Date.now()}.png`;
+      const outputPath = path.join(process.cwd(), 'public', outputFileName);
 
-    // ✅ 合成実行：背景 → 合成画像 → テキスト
-    await sharp(buffer1)
-      .composite([
-        { input: resizedOverlay, gravity: 'center' },
-        { input: textImage, top: height - 110, left: 0 },
-      ])
-      .png()
-      .toFile(outputPath)
+      // Composite all layers onto the background
+      await canvas
+        .composite(compositeLayers)
+        .png()
+        .toFile(outputPath);
 
-    return NextResponse.json({ url: '/output.png' })
+      generatedImageUrls.push(`/${outputFileName}`);
+    }
+
+    return NextResponse.json({ urls: generatedImageUrls });
+
   } catch (e: any) {
-    console.error('合成失敗:', e.message)
-    return NextResponse.json({ error: 'サーバーエラー', message: e.message }, { status: 500 })
+    console.error('Image composition failed:', e);
+    return NextResponse.json({ error: 'Server error', message: e.message }, { status: 500 });
   }
 }
