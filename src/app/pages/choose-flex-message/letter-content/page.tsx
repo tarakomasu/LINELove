@@ -198,6 +198,7 @@ export default function MergeEditor() {
                 size={{ width: item.width, height: item.height }}
                 position={{ x: item.x, y: item.y }}
                 bounds="parent"
+                scale={scale}
                 onDragStop={(e, d) =>
                   updateItem(page.id, item.id, { x: d.x, y: d.y })
                 }
