@@ -41,7 +41,7 @@ export const letter = {
     action: {
       type: "uri",
       label: "action",
-      uri: "https://liff.line.me/2007545363-o6yDADGR",
+      uri: "https://birthday-seven-amber.vercel.app/",
     },
   },
 };
