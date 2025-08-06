@@ -43,14 +43,9 @@ export default function RndEditableWithFocusButton() {
         onMouseDown={(e) => {
           // Rndコンポーネント自体をクリックした場合も編集可能にする
           console.log("koyoi");
+          console.log(editableRef.current);
           if (!wasDragging.current) {
             editableRef.current?.focus();
-            const range = document.createRange();
-            const selection = window.getSelection();
-            range.selectNodeContents(editableRef.current!);
-            range.collapse(false);
-            selection?.removeAllRanges();
-            selection?.addRange(range);
           }
         }}
       >
